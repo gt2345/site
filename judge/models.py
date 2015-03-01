@@ -252,7 +252,6 @@ SUBMISSION_RESULT = (
     ('AB', 'Aborted'),
 )
 
-
 class Submission(models.Model):
     STATUS = (
         ('QU', 'Queued'),
@@ -336,6 +335,60 @@ class Submission(models.Model):
             ('view_all_submission', 'View all submission'),
         )
 
+
+HACK_RESULT = (
+    ('AC', 'Successful Hack'),
+    ('WA', 'Unsuccessful Hack'),
+    ('TLE', 'Time Limit Exceeded'),
+    ('MLE', 'Memory Limit Exceeded'),
+    ('OLE', 'Output Limit Exceeded'),
+    ('IR', 'Invalid Return'),
+    ('RTE', 'Runtime Error'),
+    ('CE', 'Compile Error'),
+    ('IE', 'Internal Error'),
+    ('AB', 'Aborted'),
+)
+
+class Hack(models.Model):
+    STATUS = (
+        ('QU', 'Queued'),
+        ('C', 'Compiled'),
+        ('H', 'Hacking'),
+        ('D', 'Completed'),
+        ('IE', 'Internal Error'),
+    )
+    RESULT = HACK_RESULT
+    USER_DISPLAY_CODES = {
+        'AC': 'Successful Hack',
+        'WA': 'Unsuccessful Hack',
+        'SC': "Short Circuited",
+        'TLE': 'Time Limit Exceeded',
+        'MLE': 'Memory Limit Exceeded',
+        'OLE': 'Output Limit Exceeded',
+        'IR': 'Invalid Return',
+        'RTE': 'Runtime Error',
+        'CE': 'Compile Error',
+        'IE': 'Internal Error (judging server error)',
+        'QU': 'Queued',
+        'C': 'Compiled',
+        'G': 'Grading',
+        'D': 'Completed',
+        'AB': 'Aborted',
+    }
+
+    hacker = models.ForeignKey(Profile)
+    target_submission = models.ForeignKey(Submission)
+    problem = models.ForeignKey(Problem)
+    date = models.DateTimeField(verbose_name='Hack time', auto_now_add=True)
+    time = models.FloatField(verbose_name='Execution time', null=True, db_index=True)
+    memory = models.FloatField(verbose_name='Memory usage', null=True)
+    language = models.ForeignKey(Language, verbose_name='Hack language')
+    source = models.TextField(verbose_name='Source code', max_length=65536)
+    status = models.CharField(max_length=2, choices=STATUS, default='QU', db_index=True)
+    result = models.CharField(max_length=3, choices=HACK_RESULT, default=None, null=True,
+                              blank=True, db_index=True)
+    error = models.TextField(verbose_name='Compile errors', null=True, blank=True)
+    feedback = models.CharField(max_length=50, verbose_name='Judging feedback', blank=True)
 
 class SubmissionTestCase(models.Model):
     RESULT = SUBMISSION_RESULT

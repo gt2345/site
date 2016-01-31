@@ -21,9 +21,13 @@ def judge_submission(submission):
     result = chan.queue_declare(queue='sub-%d' % submission.id)
     if not result.method.consumer_count:
         chan.basic_publish(exchange='', routing_key='submission-id', body=str(submission.id))
+
     language = submission.language.key
     code = problem.code
-    chan.basic_publish(exchange='', routing_key='submission', body=json.dumps({
+    queue = 'dmoj.%s.%s' % (code, language)
+
+    chan.queue_declare(queue)
+    chan.basic_publish(exchange='', routing_key=queue, body=json.dumps({
         'id': submission.id,
         'problem': code,
         'language': language,
@@ -32,6 +36,7 @@ def judge_submission(submission):
         'memory-limit': memory,
         'short-circuit': problem.short_circuit,
     }).encode('zlib'))
+
     chan.close()
     logger.info('Dispatching submission: %d, language: %s, code: %s', submission.id, language, code)
 

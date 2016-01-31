@@ -32,9 +32,7 @@ def auth_resource(request):
             return HttpResponse(['deny', 'allow'][permission in {'read', 'write', 'configure'}])
         elif name.startswith('latency'):
             return HttpResponse(['deny', 'allow'][permission in {'read', 'write'}])
-        elif name.startswith('submission'):
-            return HttpResponse(['deny', 'allow'][permission == 'read'])
-        elif name.startswith('sub-'):
+        elif name.startswith('dmoj.') or name.startswith('sub-'):
             return HttpResponse(['deny', 'allow'][permission in {'read', 'write', 'configure'}])
         else:
             return HttpResponse('deny')

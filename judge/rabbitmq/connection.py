@@ -9,7 +9,6 @@ conn = None
 
 
 def initialize(chan):
-    chan.queue_declare(queue='submission', durable=True)
     chan.queue_declare(queue='submission-id', durable=True)
     chan.queue_declare(queue='judge-ping', durable=True)
     chan.queue_declare(queue='latency', durable=True)

@@ -1,13 +1,13 @@
 Django>=1.11,<2
 django_compressor
 django-mptt>=0.8.4,<0.9
--e git://github.com/DMOJ/django-pagedown.git#egg=django-pagedown
+-e https://gitee.com/crlf/django-pagedown.git#egg=django-pagedown
 django-registration-redux>=1.11,<2
 django-reversion
 django-social-share
 django-sortedm2m
 django-impersonate
--e git://github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
+-e https://gitee.com/crlf/dmoj-wpadmin.git#egg=dmoj-wpadmin
 lxml
 Pygments
 mistune
